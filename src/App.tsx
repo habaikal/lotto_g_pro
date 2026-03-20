@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
-import { RefreshCw, BarChart2, Zap, TrendingUp, Settings, Download, Share } from 'lucide-react';
+import { RefreshCw, BarChart2, Zap, TrendingUp, Settings, Download, Share, Trash2 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
 /**
@@ -525,12 +525,12 @@ export default function LottoGenius() {
                             </div>
 
                             <div>
-                                <label className="block text-xs uppercase tracking-widest text-neutral-500 mb-2">생성 게임 수 (0-50)</label>
+                                <label className="block text-xs uppercase tracking-widest text-neutral-500 mb-2">생성 게임 수 (0-10000)</label>
                                 <div className="flex items-center space-x-4">
                                     <input
                                         type="range"
                                         min="0"
-                                        max="50"
+                                        max="10000"
                                         value={targetGameCount}
                                         onChange={(e) => setTargetGameCount(parseInt(e.target.value))}
                                         className="w-full h-1.5 bg-neutral-800 rounded-full appearance-none cursor-pointer accent-amber-500"
@@ -561,7 +561,7 @@ export default function LottoGenius() {
                 </section>
 
                 {/* Action Button */}
-                <div className="flex justify-center mt-12 mb-8">
+                <div className="flex justify-center mt-12 mb-8 space-x-6">
                     <button
                         onClick={generateLottoNumbers}
                         disabled={isGenerating || historyData.length === 0}
@@ -588,6 +588,20 @@ export default function LottoGenius() {
                                 </>
                             )}
                         </span>
+                    </button>
+                    <button
+                        onClick={() => { setGeneratedGames([]); setLogs([]); }}
+                        disabled={generatedGames.length === 0}
+                        className={`
+                          flex items-center justify-center space-x-2
+                          px-8 py-6 rounded-full font-bold text-xl tracking-widest
+                          transition-all duration-300 border
+                          shadow-lg
+                          ${generatedGames.length === 0 ? 'bg-neutral-800/50 text-neutral-600 border-neutral-800 cursor-not-allowed' : 'text-neutral-400 bg-neutral-800/80 hover:bg-red-900/40 hover:text-red-400 border-neutral-700 hover:border-red-500/50'}
+                        `}
+                    >
+                        <Trash2 className="w-6 h-6" />
+                        <span>생성 초기화</span>
                     </button>
                 </div>
 
