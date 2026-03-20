@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { supabase } from './supabaseClient';
-import { RefreshCw, BarChart2, Zap, TrendingUp, Settings, Download, Share, Trash2 } from 'lucide-react';
+import { RefreshCw, BarChart2, ShieldCheck, Zap, TrendingUp, Settings, Download, Share, Trash2 } from 'lucide-react';
 import * as XLSX from 'xlsx';
 
 /**
@@ -106,7 +106,7 @@ export default function LottoGenius() {
     const [historyData, setHistoryData] = useState<LottoDraw[]>([]);
 
 
-    const [tolerance] = useState(0.05); // 5% default
+    const [tolerance, setTolerance] = useState(0.05); // 5% default
     const [generatedGames, setGeneratedGames] = useState<Game[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [stats, setStats] = useState<Stats>({ avgSum: 0, hotNumbers: [], coldNumbers: [], lastDraw: [] });
@@ -470,144 +470,152 @@ export default function LottoGenius() {
     };
 
     return (
-        <div className="min-h-screen bg-neutral-950 text-neutral-200 font-sans selection:bg-amber-500 selection:text-neutral-950 pb-20">
+        <div className="min-h-screen bg-slate-900 text-slate-200 font-sans selection:bg-emerald-500 selection:text-white pb-20">
             {/* Header */}
-            <header className="bg-neutral-950/80 backdrop-blur-2xl border-b border-amber-900/30 sticky top-0 z-50">
-                <div className="max-w-5xl mx-auto px-6 py-5 flex justify-between items-center">
-                    <div className="flex items-center space-x-4">
-                        <div className="bg-gradient-to-br from-yellow-300 via-amber-500 to-yellow-700 p-3 rounded-xl shadow-[0_0_25px_rgba(245,158,11,0.2)] border border-amber-400/20">
-                            <Zap className="w-6 h-6 text-neutral-950" fill="currentColor" />
+            <header className="bg-slate-800/50 backdrop-blur-lg border-b border-white/5 sticky top-0 z-50">
+                <div className="max-w-4xl mx-auto px-6 py-4 flex justify-between items-center">
+                    <div className="flex items-center space-x-2">
+                        <div className="bg-gradient-to-tr from-emerald-400 to-cyan-500 p-2 rounded-lg shadow-lg shadow-emerald-500/20">
+                            <Zap className="w-6 h-6 text-white" fill="currentColor" />
                         </div>
                         <div>
-                            <h1 className="text-3xl font-black text-transparent bg-clip-text bg-gradient-to-r from-amber-200 via-yellow-500 to-amber-700 tracking-tighter">
-                                LOTTO GENIE
-                            </h1>
-                            <p className="text-xs text-amber-500/60 uppercase tracking-widest mt-1 font-medium">Premium AI Prediction Engine</p>
+                            <h1 className="text-xl font-bold text-white tracking-tight">Lotto Genius <span className="text-purple-400">PRO</span> <span className="text-xs text-slate-500 font-normal ml-1">v2.0</span></h1>
+                            <p className="text-xs text-slate-400">지능형 룰렛 가중치 기반 로또 예측 시스템</p>
                         </div>
                     </div>
                 </div>
             </header>
 
-            <main className="max-w-5xl mx-auto px-4 py-10 space-y-10">
+            <main className="max-w-4xl mx-auto px-4 py-8 space-y-8">
 
                 {/* Intro/Upload Section */}
-                <section className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div className="bg-neutral-900/50 backdrop-blur-xl rounded-3xl p-8 border border-amber-900/20 shadow-2xl relative overflow-hidden group">
-                        <div className="absolute top-0 right-0 w-64 h-64 bg-amber-600 blur-[100px] opacity-10 group-hover:opacity-20 transition duration-700"></div>
-                        <div className="absolute bottom-0 left-0 w-40 h-40 bg-yellow-400 blur-[80px] opacity-5 group-hover:opacity-10 transition duration-700"></div>
+                <section className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="bg-slate-800 rounded-2xl p-6 border border-slate-700 shadow-xl relative overflow-hidden group">
+                        <div className="absolute top-0 right-0 -mt-4 -mr-4 w-24 h-24 bg-purple-500 blur-3xl opacity-20 group-hover:opacity-30 transition"></div>
 
-                        <h2 className="text-xl font-bold text-amber-100 mb-6 flex items-center">
-                            <Settings className="w-5 h-5 mr-3 text-amber-500" />
+                        <h2 className="text-lg font-semibold text-white mb-4 flex items-center">
+                            <Settings className="w-5 h-5 mr-2 text-purple-400" />
                             분석 설정
                         </h2>
 
-                        <div className="space-y-6 relative z-10">
+                        <div className="space-y-4">
                             <div>
-                                <label className="block text-xs uppercase tracking-widest text-neutral-500 mb-2">데이터베이스 상태</label>
-                                <div className="px-4 py-4 bg-black/40 border border-neutral-800 rounded-xl flex justify-between items-center shadow-inner">
-                                    <div className="flex items-center space-x-3 text-amber-500">
-                                        <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse shadow-[0_0_10px_rgba(245,158,11,0.8)]"></div>
-                                        <span className="text-sm font-medium">최종 분석 회차</span>
+                                <label className="block text-sm text-slate-400 mb-2">데이터베이스 상태</label>
+                                <div className="px-3 py-3 bg-slate-900 border border-slate-700 rounded-lg flex justify-between items-center">
+                                    <div className="flex items-center space-x-2 text-emerald-400">
+                                        <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></div>
+                                        <span className="text-sm font-semibold">최종회차</span>
                                     </div>
-                                    <div className="text-xl text-amber-200 font-bold font-mono bg-neutral-900/50 px-4 py-1.5 rounded-lg border border-amber-900/30">
+                                    <div className="text-lg text-white font-bold font-mono bg-slate-800 px-3 py-1 rounded border border-slate-700">
                                         {historyData.length > 0 ? historyData.length : '...'}회
                                     </div>
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-xs uppercase tracking-widest text-neutral-500 mb-2">예측 허용 범위 (Tolerance)</label>
-                                <div className="flex bg-black/40 rounded-xl p-1.5 border border-neutral-800">
-                                    <div className="flex-1 py-2.5 text-sm font-medium rounded-lg text-center bg-gradient-to-r from-amber-600 to-yellow-600 text-white shadow-lg shadow-amber-900/20 cursor-default">
-                                        Standard
-                                    </div>
+                                <label className="block text-sm text-slate-400 mb-2">예측 허용 범위 (Tolerance)</label>
+                                <div className="flex bg-slate-900 rounded-lg p-1 border border-slate-700">
+                                    <button
+                                        onClick={() => setTolerance(0.02)}
+                                        className={`flex-1 py-1.5 text-sm rounded-md transition ${tolerance === 0.02 ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
+                                    >
+                                        Strict (±2%)
+                                    </button>
+                                    <button
+                                        onClick={() => setTolerance(0.05)}
+                                        className={`flex-1 py-1.5 text-sm rounded-md transition ${tolerance === 0.05 ? 'bg-indigo-600 text-white shadow-lg' : 'text-slate-400 hover:text-white'}`}
+                                    >
+                                        Standard (±5%)
+                                    </button>
                                 </div>
                             </div>
 
                             <div>
-                                <label className="block text-xs uppercase tracking-widest text-neutral-500 mb-2">생성 게임 수 (0-10000)</label>
-                                <div className="flex items-center space-x-4">
+                                <label className="block text-sm text-slate-400 mb-2">생성 게임 수 (0-50)</label>
+                                <div className="flex items-center space-x-3">
                                     <input
                                         type="range"
                                         min="0"
-                                        max="10000"
+                                        max="50"
                                         value={targetGameCount}
                                         onChange={(e) => setTargetGameCount(parseInt(e.target.value))}
-                                        className="w-full h-1.5 bg-neutral-800 rounded-full appearance-none cursor-pointer accent-amber-500"
+                                        className="w-full h-2 bg-slate-700 rounded-lg appearance-none cursor-pointer accent-emerald-500"
                                     />
-                                    <span className="bg-black/60 px-4 py-2 rounded-lg text-amber-200 font-mono text-lg border border-neutral-800 shadow-inner">{targetGameCount}</span>
+                                    <span className="bg-slate-900 px-3 py-1 rounded text-white font-mono min-w-[3rem] text-center border border-slate-700">{targetGameCount}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     {/* Stats Dashboard */}
-                    <div className="grid grid-cols-1 gap-6">
+                    <div className="grid grid-cols-1 gap-4">
                         <StatCard
                             title="평균 합계 (Avg Sum)"
                             value={stats.avgSum > 0 ? stats.avgSum.toFixed(1) : "N/A"}
-                            subtext={stats.avgSum > 0 ? "" : "데이터 로드 필요"}
+                            subtext={stats.avgSum > 0 ? `Target: ${(stats.avgSum * (1 - tolerance)).toFixed(0)} ~ ${(stats.avgSum * (1 + tolerance)).toFixed(0)}` : "데이터 로드 필요"}
                             icon={TrendingUp}
-                            colorClass="text-amber-500 bg-amber-500/10 border border-amber-500/20"
+                            colorClass="bg-emerald-500"
                         />
                         <StatCard
                             title="최다 빈출 (Hot Numbers)"
                             value={stats.hotNumbers.length > 0 ? stats.hotNumbers.slice(0, 5).map(n => n.num).join(', ') : "N/A"}
                             subtext="Too hot to handle? (가중치 최소화 적용)"
                             icon={BarChart2}
-                            colorClass="text-yellow-600 bg-yellow-600/10 border border-yellow-600/20"
+                            colorClass="bg-orange-500"
                         />
                     </div>
                 </section>
 
                 {/* Action Button */}
-                <div className="flex justify-center mt-12 mb-8 space-x-6">
+                <div className="flex justify-center space-x-4">
                     <button
                         onClick={generateLottoNumbers}
                         disabled={isGenerating || historyData.length === 0}
                         className={`
               relative overflow-hidden group
-              px-16 py-6 rounded-full font-black text-2xl tracking-widest
-              text-neutral-900 shadow-[0_0_50px_-5px_rgba(245,158,11,0.6)]
-              transition-all duration-500 transform hover:scale-105 active:scale-95
-              border border-yellow-300/50
-              ${(isGenerating || historyData.length === 0) ? 'bg-neutral-800 text-neutral-500 border-neutral-700 cursor-not-allowed shadow-none' : 'bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-600 hover:from-yellow-200 hover:via-amber-300 hover:to-amber-500'}
+              px-12 py-5 rounded-full font-bold text-xl tracking-wider
+              text-white shadow-[0_0_40px_-10px_rgba(16,185,129,0.5)]
+              transition-all duration-300 transform hover:scale-105 active:scale-95
+              ${(isGenerating || historyData.length === 0) ? 'bg-slate-700 cursor-not-allowed opacity-50' : 'bg-gradient-to-r from-purple-600 to-indigo-500 hover:from-purple-500 hover:to-indigo-400'}
             `}
                     >
-                        <div className="absolute inset-0 bg-white/20 transform -skew-x-12 -translate-x-full group-hover:animate-shine z-0"></div>
-                        <span className="relative z-10 flex items-center justify-center space-x-3">
+                        <span className="relative z-10 flex items-center space-x-3">
                             {isGenerating ? (
                                 <>
-                                    <RefreshCw className="w-7 h-7 animate-spin text-neutral-900" />
-                                    <span>분석 및 추출 중...</span>
+                                    <RefreshCw className="w-6 h-6 animate-spin" />
+                                    <span>분석 중...</span>
                                 </>
                             ) : (
                                 <>
-                                    <Zap className="w-7 h-7 text-neutral-900" fill="currentColor" />
-                                    <span>프리미엄 번호 생성</span>
+                                    <Zap className="w-6 h-6" fill="currentColor" />
+                                    <span>AI 번호 생성</span>
                                 </>
                             )}
                         </span>
                     </button>
+
                     <button
-                        onClick={() => { setGeneratedGames([]); setLogs([]); }}
+                        onClick={() => {
+                            setGeneratedGames([]);
+                            setLogs([]);
+                        }}
                         disabled={generatedGames.length === 0}
                         className={`
-                          flex items-center justify-center space-x-2
-                          px-8 py-6 rounded-full font-bold text-xl tracking-widest
-                          transition-all duration-300 border
-                          shadow-lg
-                          ${generatedGames.length === 0 ? 'bg-neutral-800/50 text-neutral-600 border-neutral-800 cursor-not-allowed' : 'text-neutral-400 bg-neutral-800/80 hover:bg-red-900/40 hover:text-red-400 border-neutral-700 hover:border-red-500/50'}
+                            px-6 py-5 rounded-full font-bold text-lg
+                            transition-all duration-300 transform hover:scale-105 active:scale-95
+                            border border-slate-600 text-slate-400 hover:text-white hover:border-slate-500 hover:bg-slate-800
+                            flex items-center space-x-2
+                            ${generatedGames.length === 0 ? 'opacity-50 cursor-not-allowed' : ''}
                         `}
                     >
-                        <Trash2 className="w-6 h-6" />
-                        <span>생성 초기화</span>
+                        <Trash2 className="w-5 h-5" />
+                        <span>초기화</span>
                     </button>
                 </div>
 
                 {/* Logs Area */}
                 {logs.length > 0 && (
-                    <div className="bg-neutral-900/80 rounded-xl p-4 text-xs font-mono text-amber-500/70 overflow-hidden border border-neutral-800 mx-auto max-w-3xl shadow-inner text-center">
+                    <div className="bg-black/30 rounded-lg p-3 text-xs font-mono text-slate-500 overflow-hidden border border-slate-800">
                         {logs.map((log, i) => (
                             <div key={i} className="truncate">{log}</div>
                         ))}
@@ -616,58 +624,56 @@ export default function LottoGenius() {
 
                 {/* Results Section */}
                 {generatedGames.length > 0 && (
-                    <section className="space-y-6 animate-fade-in-up mt-12">
-                        <div className="flex flex-col sm:flex-row justify-between items-center bg-gradient-to-r from-neutral-900 to-neutral-800 p-6 rounded-2xl border border-amber-900/40 shadow-xl relative overflow-hidden">
-                            <div className="absolute top-0 left-0 w-1 h-full bg-gradient-to-b from-amber-300 to-amber-600"></div>
-                            <h3 className="text-2xl font-bold text-amber-100 flex items-center space-x-4 mb-6 sm:mb-0 ml-4">
-                                <span>프리미엄 추천 조합</span>
-                                <span className="text-sm font-bold text-neutral-900 bg-gradient-to-r from-amber-400 to-yellow-500 px-3 py-1 rounded-full shadow-lg shadow-amber-500/20">
-                                    {generatedGames.length} SETS
+                    <section className="space-y-4 animate-fade-in-up">
+                        <div className="flex flex-col sm:flex-row justify-between items-center bg-slate-800/80 p-4 rounded-xl border-l-4 border-emerald-500 backdrop-blur">
+                            <h3 className="text-xl font-bold text-white flex items-center space-x-2 mb-4 sm:mb-0">
+                                <span>추천 조합</span>
+                                <span className="text-sm font-normal text-emerald-400 bg-emerald-400/10 px-2 py-0.5 rounded-full">
+                                    {generatedGames.length} Games
                                 </span>
                             </h3>
 
-                            <div className="flex space-x-4">
+                            <div className="flex space-x-2">
                                 <button
                                     onClick={handleDownload}
-                                    className="flex items-center space-x-2 px-5 py-2.5 bg-neutral-800 hover:bg-neutral-700 text-amber-100 text-sm font-medium rounded-xl transition duration-300 border border-neutral-600 hover:border-amber-500/50"
+                                    className="flex items-center space-x-1.5 px-3 py-1.5 bg-slate-700 hover:bg-slate-600 text-slate-200 text-sm rounded-lg transition border border-slate-600"
                                 >
-                                    <Download className="w-5 h-5" />
-                                    <span>Excel 저장</span>
+                                    <Download className="w-4 h-4" />
+                                    <span>저장</span>
                                 </button>
                                 <button
                                     onClick={handleSend}
-                                    className="flex items-center space-x-2 px-5 py-2.5 bg-gradient-to-r from-amber-600 to-yellow-600 hover:from-amber-500 hover:to-yellow-500 text-white text-sm font-bold rounded-xl transition duration-300 shadow-[0_0_20px_rgba(245,158,11,0.3)] hover:shadow-[0_0_25px_rgba(245,158,11,0.5)]"
+                                    className="flex items-center space-x-1.5 px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white text-sm rounded-lg transition shadow-lg shadow-indigo-500/20"
                                 >
-                                    <Share className="w-5 h-5" />
-                                    <span>전송하기</span>
+                                    <Share className="w-4 h-4" />
+                                    <span>전송</span>
                                 </button>
                             </div>
                         </div>
 
-                        <div className="grid gap-6">
+                        <div className="grid gap-4">
                             {generatedGames.map((game, index) => (
                                 <div
                                     key={index}
-                                    className="bg-neutral-900/60 backdrop-blur-xl border border-neutral-800 rounded-2xl p-6 sm:p-8 flex flex-col sm:flex-row items-center justify-between hover:border-amber-500/40 hover:bg-neutral-900/80 transition duration-500 group shadow-2xl relative overflow-hidden"
+                                    className="bg-slate-800/80 backdrop-blur border border-slate-700 rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row items-center justify-between hover:border-emerald-500/50 transition duration-300 group shadow-lg"
                                 >
-                                    <div className="absolute inset-0 bg-gradient-to-r from-amber-600/0 via-amber-600/5 to-amber-600/0 opacity-0 group-hover:opacity-100 transition duration-500"></div>
-                                    <div className="flex items-center space-x-6 mb-6 sm:mb-0 w-full sm:w-auto justify-center relative z-10">
-                                        <span className="text-amber-500/50 font-black text-xl italic tracking-tighter mr-2 w-8 text-right">0{index + 1}</span>
-                                        <div className="flex space-x-2 sm:space-x-4">
+                                    <div className="flex items-center space-x-4 mb-4 sm:mb-0 w-full sm:w-auto justify-center">
+                                        <span className="text-slate-500 font-mono text-sm mr-2">#{index + 1}</span>
+                                        <div className="flex space-x-2 sm:space-x-3">
                                             {game.numbers.map((num) => (
                                                 <LottoBall key={num} number={num} animate={true} />
                                             ))}
                                         </div>
                                     </div>
 
-                                    <div className="flex space-x-8 text-xs sm:text-sm w-full sm:w-auto justify-between sm:justify-end px-4 sm:px-0 border-t sm:border-t-0 border-neutral-800 pt-5 sm:pt-0 mt-4 sm:mt-0 relative z-10">
+                                    <div className="flex space-x-6 text-xs sm:text-sm text-slate-400 w-full sm:w-auto justify-between sm:justify-end px-4 sm:px-0 border-t sm:border-t-0 border-slate-700 pt-3 sm:pt-0 mt-2 sm:mt-0">
                                         <div className="flex flex-col items-center sm:items-end">
-                                            <span className="text-[10px] text-neutral-500 tracking-widest uppercase mb-1">Total Sum</span>
-                                            <span className="text-amber-400 font-bold text-lg">{game.sum}</span>
+                                            <span className="text-xs text-slate-600 uppercase">Sum</span>
+                                            <span className="text-emerald-400 font-bold">{game.sum}</span>
                                         </div>
                                         <div className="flex flex-col items-center sm:items-end">
-                                            <span className="text-[10px] text-neutral-500 tracking-widest uppercase mb-1">Ratio</span>
-                                            <span className="text-neutral-300 font-medium text-lg">{game.oddCount}:{6 - game.oddCount}</span>
+                                            <span className="text-xs text-slate-600 uppercase">Odd/Even</span>
+                                            <span className="text-slate-300">{game.oddCount}:{6 - game.oddCount}</span>
                                         </div>
                                     </div>
                                 </div>
@@ -675,6 +681,32 @@ export default function LottoGenius() {
                         </div>
                     </section>
                 )}
+
+                {/* Algorithm Info */}
+                <section className="bg-slate-800/50 border border-slate-700 rounded-xl p-6 mt-8">
+                    <h4 className="text-slate-300 font-semibold mb-4 flex items-center">
+                        <ShieldCheck className="w-5 h-5 mr-2 text-purple-400" />
+                        Lotto Genius Pro 알고리즘
+                    </h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-slate-400">
+                        <div className="flex items-start space-x-2">
+                            <div className="w-1.5 h-1.5 mt-1.5 rounded-full bg-purple-500 shrink-0"></div>
+                            <p><strong>가중치 룰렛:</strong> 장기 미출현 번호(가중치UP), 최다 빈출(가중치DOWN) 기반 지능형 추출</p>
+                        </div>
+                        <div className="flex items-start space-x-2">
+                            <div className="w-1.5 h-1.5 mt-1.5 rounded-full bg-purple-500 shrink-0"></div>
+                            <p><strong>디펜시브 필터:</strong> 과거 1등 번호 5개 이상 일치 배제, 직전 당첨 번호 4개이상 중복 배제</p>
+                        </div>
+                        <div className="flex items-start space-x-2">
+                            <div className="w-1.5 h-1.5 mt-1.5 rounded-full bg-purple-500 shrink-0"></div>
+                            <p><strong>패턴 필터:</strong> 4연속 번호 제외, 끝자리 4개 이상 중복 제외, 인기번호 4개 이상 중복 제외</p>
+                        </div>
+                        <div className="flex items-start space-x-2">
+                            <div className="w-1.5 h-1.5 mt-1.5 rounded-full bg-purple-500 shrink-0"></div>
+                            <p><strong>기본 밸런스:</strong> 전체 합계 분석(±{tolerance * 100}%), 극단적 홀짝(6:0) 및 생일번호(1~31) 제한</p>
+                        </div>
+                    </div>
+                </section>
             </main>
         </div>
     );
